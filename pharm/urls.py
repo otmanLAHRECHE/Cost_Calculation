@@ -74,4 +74,11 @@ urlpatterns = [
     path('api/update_bon_arrivage_item/<int:id>', views.updateBonArrivageItem),
     path('api/delete_bon_arrivage_item/<int:id>', views.deleteBonArrivageItem),
     path('api/get_fourn_for_selection/', views.getAllFournForSelection),
+
+    path('api/get_all_articles/', views.getAllArticles),
+    path('api/get_all_articles_names/', views.getAllArticlesNames),
+    path('api/get_selected_article/<int:id>', views.getSelectedArticle),
+    path('api/add_article/', views.addArticle),
+    path('api/update_article/<int:id>', views.updateArticle),
+    path('api/delete_article/<int:id>', views.deleteArticle),
 ]

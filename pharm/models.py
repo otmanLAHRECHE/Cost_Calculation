@@ -117,6 +117,16 @@ class Arivage_items(models.Model):
 
 
 
+class Article(models.Model):
+    id = models.AutoField(primary_key=True)
+    article_code = models.CharField(max_length=100)
+    article_name = models.CharField(max_length=100)
+    article_type = models.CharField(max_length=100)
+    
+
+    def __str__(self):
+        return self.article_code
+
 
 
 

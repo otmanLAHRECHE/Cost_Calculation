@@ -1283,4 +1283,96 @@ def getAllFournForSelection(request):
     
     else :
         return Response(status=status.HTTP_401_UNAUTHORIZED)    
+    
+
+
+
+
+
+
+@api_view(['GET'])
+def getAllArticles(request):
+    if request.method == 'GET' and request.user.is_authenticated:
+        queryset = Article.objects.all()
+
+        source_serial = ArticleSerialize(queryset, many=True)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
+def getAllArticlesNames(request):
+    if request.method == 'GET' and request.user.is_authenticated:
+        queryset = Article.objects.all()
+
+        source_serial = ArticleListSerialize(queryset, many=True)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)     
+
+@api_view(['GET'])
+def getSelectedArticle(request, id):
+    if request.method == 'GET' and request.user.is_authenticated:
+
+        queryset = Article.objects.get(id=id)
+
+        source_serial = ArticleSerialize(queryset)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)   
+
+@api_view(['POST'])
+def addArticle(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        article_code = request.data.pop("article_code")
+        article_name = request.data.pop("article_name")
+        article_type = request.data.pop("article_type")
+
+        article = Article.objects.create(article_code=article_code, article_name=article_name, article_type=article_type)
+
+        if article.id is not None:
+            return Response(status=status.HTTP_201_CREATED, data={"status": "article created sucsusfully"}) 
+        
+        else:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def updateArticle(request, id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        article_code = request.data.pop("article_code")
+        article_name = request.data.pop("article_name")
+        article_type = request.data.pop("article_type")
+
+        article_to_update = Article.objects.get(id=id)
+        if not article_to_update.article_code == article_code:
+            article_to_update.article_code = article_code
+        if not article_to_update.article_name == article_name:
+            article_to_update.article_name = article_name
+        if not article_to_update.article_type == article_type:
+            article_to_update.article_type = article_type
+        
+        article_to_update.save()
+        
+        return Response(status=status.HTTP_200_OK, data = {"status":"article updated"})
+
+
+@api_view(['DELETE'])
+def deleteArticle(request, id):
+    if request.method == 'DELETE' and request.user.is_authenticated:
+        Article.objects.filter(id=id).delete()
+        return Response(status=status.HTTP_200_OK, data = {"status":"Article deleted"})
+
+
+
+
 

@@ -14,10 +14,23 @@ class MedicamentSerialize(serializers.ModelSerializer):
         model = Medicament
         fields = ['id', 'medic_code', 'medic_name', 'medic_dose', 'dose_unit', 'medic_place', 'medic_type']
 
+class ArticleSerialize(serializers.ModelSerializer):
+
+    class Meta:
+        model = Article
+        fields = ['id', 'article_code', 'article_name', 'article_type']
+
 class MedicamentListSerialize(serializers.ModelSerializer):
     label = serializers.CharField(source='medic_name')
     class Meta:
         model = Medicament
+        fields = ['id', 'label']
+
+
+class ArticleListSerialize(serializers.ModelSerializer):
+    label = serializers.CharField(source='medic_name')
+    class Meta:
+        model = Article
         fields = ['id', 'label']
 
 

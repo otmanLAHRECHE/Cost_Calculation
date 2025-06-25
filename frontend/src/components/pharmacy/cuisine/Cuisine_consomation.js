@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DataGrid, GridActionsCellItem, GridRowModes, GridRowEditStopReasons } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridRowModes, GridRowEditStopReasons, GridToolbar } from '@mui/x-data-grid';
 import { Box, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
@@ -10,9 +10,10 @@ import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 
 const initialRows = [
-  { id: 1, name: 'Alice', age: 28 },
-  { id: 2, name: 'Bob', age: 34 },
-  { id: 3, name: 'Charlie', age: 25 },
+  { id: 1, article: 'حليب', qntMax: 3000, qntMin: 1000, year: 2025, prixUnit: 200, tva: 0 },
+{ id: 2, article: 'حليب', qntMax: 3000, qntMin: 1000, year: 2025, prixUnit: 200, tva: 0 },
+  { id: 3, article: 'حليب', qntMax: 3000, qntMin: 1000, year: 2025, prixUnit: 200, tva: 0 },
+  
 ];
 
 export default function Cuisine_consomation(){
@@ -56,8 +57,12 @@ export default function Cuisine_consomation(){
   };
 
   const columns = [
-    { field: 'name', headerName: 'Name', width: 200, editable: true },
-    { field: 'age', headerName: 'Age', type: 'number', width: 100, editable: true },
+    { field: 'article', headerName: 'المواد الغذائية', width: 100, editable: false },
+    { field: 'qntMax', headerName: 'القيمة القصوى', type: 'number', width: 100, editable: true },
+    { field: 'qntMin', headerName: 'القيمة الدنيا', type: 'number', width: 100, editable: true },
+    { field: 'year', headerName: 'السنة', type: 'number', width: 100, editable: true },
+    { field: 'prixUnit', headerName: 'التسعيرة الوحدوية', type: 'number', width: 100, editable: true },
+    { field: 'tva', headerName: 'TVAضريبة القيمة المصافة', type: 'number', width: 150, editable: true },
     {
       field: 'actions',
       type: 'actions',
@@ -86,6 +91,10 @@ export default function Cuisine_consomation(){
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
+      
+                                  components={{
+                                    Toolbar: GridToolbar,
+                                  }}
         rows={rows}
         columns={columns}
         editMode="row"
@@ -94,6 +103,8 @@ export default function Cuisine_consomation(){
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         experimentalFeatures={{ newEditingApi: true }}
+        
+        disableSelection={true}
       />
     </Box>
 

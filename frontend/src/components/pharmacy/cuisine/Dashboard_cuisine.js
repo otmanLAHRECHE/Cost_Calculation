@@ -39,7 +39,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import LanIcon from '@mui/icons-material/Lan';
 import Cuisine_Articles from './Cuisine_articles';
 
-
+import Cuisine_consomation from './Cuisine_consomation';
 const drawerWidth = 240;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -165,7 +165,8 @@ function DashboardContent_Cuisine() {
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
-              pr: '24px', // keep right padding when drawer closed
+              pr: '24px',
+              backgroundColor: '#d87d4e', // keep right padding when drawer closed
             }}
           >
             <IconButton
@@ -275,7 +276,7 @@ function DashboardContent_Cuisine() {
         <Toolbar />
 
         
-        {page[0] ? <Cuisine_Articles/> : null}
+        {page[0] ? <Cuisine_consomation/> : null}
         {page[1] ? <Cuisine_Articles/> : null}
         {page[2] ? <Cuisine_Articles/> : null}
         {page[3] ? <Cuisine_Articles/> : null}

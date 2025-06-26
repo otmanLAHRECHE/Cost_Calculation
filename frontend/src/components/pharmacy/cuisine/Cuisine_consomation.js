@@ -62,7 +62,7 @@ export default function Cuisine_consomation(){
     { field: 'qntMin', headerName: 'القيمة الدنيا', type: 'number', width: 100, editable: true },
     { field: 'year', headerName: 'السنة', type: 'number', width: 100, editable: true },
     { field: 'prixUnit', headerName: 'التسعيرة الوحدوية', type: 'number', width: 100, editable: true },
-    { field: 'tva', headerName: 'TVAضريبة القيمة المصافة', type: 'number', width: 150, editable: true },
+    { field: 'tva', headerName: 'TVAضريبة القيمة المضافة', type: 'number', width: 150, editable: true },
     {
       field: 'actions',
       type: 'actions',

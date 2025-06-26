@@ -126,7 +126,7 @@ function DashboardContent_Cuisine() {
   const clickConsomation = () =>{
     
       setPage([true,false,false,false])
-      setToolBar("Consomation par mois")
+      setToolBar("Quantité conventionnelle")
   };
 
   const clickPrix= () =>{
@@ -230,15 +230,15 @@ function DashboardContent_Cuisine() {
           <List component="nav">
                 <ListItemButton selected = {page[0]} onClick={clickConsomation}>
                   <ListItemIcon>
-                    <BackupTableIcon />
+                    <PriceChangeIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Consomation"/>
+                  <ListItemText primary="Quantité conventionnelle"/>
                 </ListItemButton>
                 <ListItemButton selected={page[1]} onClick={clickPrix}>
                   <ListItemIcon>
-                    <PriceChangeIcon />
+                    <BackupTableIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Prix articles" />
+                  <ListItemText primary="Consommation" />
                 </ListItemButton>
                             <Divider sx={{ my: 1 }} />
                     <ListSubheader component="div" inset>

@@ -1379,9 +1379,11 @@ def generateQntConvByYear(request, year):
         
         queryset = Article.objects.all()
         print(year)
-        for i in queryset:
-            print(i)
-            
+        print(queryset)
+        for article in queryset:
+            a= Article.objects.get(id=article.id)
+            print(a.article_name)
+            art = QntConv.objects.create(article=a, year=year, qntMax=0.0, qntMin=0.0, prixUnit=0.0, tva=0)
         return Response(status=status.HTTP_201_CREATED, data={"status": "state generated sucsusfully"}) 
     else :
         return Response(status=status.HTTP_401_UNAUTHORIZED)  
@@ -1401,3 +1403,10 @@ def getAllQntConvByYear(request, year):
     else :
         return Response(status=status.HTTP_401_UNAUTHORIZED)     
 
+
+
+@api_view(['DELETE'])
+def deleteQntConvByYear(request, year):
+    if request.method == 'DELETE' and request.user.is_authenticated:
+        QntConv.objects.filter(year=year).delete()
+        return Response(status=status.HTTP_200_OK, data = {"status":"State deleted"})

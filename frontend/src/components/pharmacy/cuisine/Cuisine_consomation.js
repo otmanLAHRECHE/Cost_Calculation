@@ -13,10 +13,22 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Container from '@mui/material/Container';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import { getAllQntConvByYear, generateState } from '../../../actions/qnt_conv'
+import { getAllQntConvByYear, generateState, deleteQntCov } from '../../../actions/qnt_conv'
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Grid from '@mui/material/Grid';
 import Alt from '../../layouts/alert';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContentText from '@mui/material/DialogContentText';
+
+import Slide from '@mui/material/Slide';
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+
 export default function Cuisine_consomation(){
 
   const [rowModesModel, setRowModesModel] = React.useState({});
@@ -31,6 +43,7 @@ export default function Cuisine_consomation(){
   const [loadError, setLoadError ] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [dataError, setDataError] = React.useState(false);
+  const [openDelete, setOpenDelete] = React.useState(false);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -78,6 +91,12 @@ export default function Cuisine_consomation(){
   const sauvQntCov = () =>{
 
         }
+
+
+  const deleteQntCovFunc = () =>{
+      
+                          setOpenDelete(true);
+  }
   const generateStateQntCov = async() =>{
     const token = localStorage.getItem("auth_token");    
       const year = dateFilter.get('year');
@@ -89,7 +108,7 @@ export default function Cuisine_consomation(){
     `${params.row.article.article_name || ''}` },
     { field: 'qntMax', headerName: 'القيمة القصوى', type: 'number', width: 100, editable: true },
     { field: 'qntMin', headerName: 'القيمة الدنيا', type: 'number', width: 100, editable: true },
-    { field: 'year', headerName: 'السنة', type: 'number', width: 100, editable: true },
+    { field: 'year', headerName: 'السنة', type: 'number', width: 100, editable: false },
     { field: 'prixUnit', headerName: 'التسعيرة الوحدوية', type: 'number', width: 100, editable: true },
     { field: 'tva', headerName: 'TVAضريبة القيمة المضافة', type: 'number', width: 150, editable: true },
     {
@@ -158,6 +177,21 @@ export default function Cuisine_consomation(){
               
                   }, [response, dateFilter]);
 
+
+                      const deleteMedicClose = () => {
+                        setOpenDelete(false);
+                      };
+                  
+                  
+                      const deleteConfirmation = async () =>{
+                  
+                        setOpenDelete(false);
+                        const token = localStorage.getItem("auth_token");
+                        const year = dateFilter.get('year')
+                        setResponse(await deleteQntCov(token, year)); 
+                  
+                      };  
+
   return (
     <React.Fragment>
       <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
@@ -198,7 +232,7 @@ export default function Cuisine_consomation(){
                 <ButtonGroup variant="outlined" aria-label="outlined primary button group" orientation="vertical">
                   <Button startIcon={<MovieCreationIcon />} onClick={generateStateQntCov}>Creation d'état</Button>
                   <Button startIcon={<SaveAltIcon />} onClick={sauvQntCov}>Sauvgarder</Button>
-                  <Button startIcon={<SaveAltIcon />} onClick={sauvQntCov}>Sauvgarder</Button>
+                  <Button startIcon={<DeleteForeverIcon />} onClick={deleteQntCovFunc}>Supprimer</Button>
                 </ButtonGroup>
                 </Box>
                 
@@ -232,6 +266,26 @@ export default function Cuisine_consomation(){
     </Grid>
 
     </Grid>
+
+
+
+    <Dialog open={openDelete}
+                                TransitionComponent={Transition}
+                                keepMounted
+                                onClose={deleteMedicClose}
+                                aria-describedby="alert-dialog-slide-description"
+                              >
+                                <DialogTitle>{"Confirmer la suppression d'un article"}</DialogTitle>
+                                <DialogContent>
+                                  <DialogContentText id="alert-dialog-slide-description">
+                                  هل انت متأكد من حذف جميع اسعار الحصص الخاصة بهذه السنة           
+                                  </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button onClick={deleteMedicClose}>رجوع</Button>
+                                  <Button onClick={deleteConfirmation}>حذف</Button>
+                                </DialogActions>
+                  </Dialog>
 
     </Container>
 

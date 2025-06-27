@@ -51,3 +51,29 @@ export async function generateState(token, year){
       }
     
     };
+
+
+    export async function deleteQntCov(token, year){
+  console.log("inside methode", token)
+  const response = await fetch(
+      '/pharm/api/delete_qnt_conv_by_year/'+year,
+      {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' +token,
+        },
+        body: JSON.stringify()
+      }
+  );
+  const text = await response.text();
+  if (response.status === 200) {
+    console.log("status 200, response: ", JSON.parse(text));
+    return JSON.parse(text);
+  } else {
+    console.log("failed", text);
+    return "error";
+  }
+
+};

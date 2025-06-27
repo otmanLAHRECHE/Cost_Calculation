@@ -506,10 +506,10 @@ export default function Cuisine_Articles(){
                                 onClose={deleteMedicClose}
                                 aria-describedby="alert-dialog-slide-description"
                               >
-                                <DialogTitle>{"Confirmer la suppression d'un médicament"}</DialogTitle>
+                                <DialogTitle>{"Confirmer la suppression d'un article"}</DialogTitle>
                                 <DialogContent>
                                   <DialogContentText id="alert-dialog-slide-description">
-                                  هل انت متأكد من حذف هذه الحصة ستفقد جميع المعلومات الخاصة بهذه الحصو بما في ذلك الإستهلاك
+                                  هل انت متأكد من حذف هذه الحصة ستفقد جميع المعلومات الخاصة بها بما في ذلك الإستهلاك
                                   </DialogContentText>
                                 </DialogContent>
                                 <DialogActions>

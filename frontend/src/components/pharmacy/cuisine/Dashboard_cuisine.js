@@ -232,7 +232,7 @@ function DashboardContent_Cuisine() {
                   <ListItemIcon>
                     <PriceChangeIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Quantité conventionnelle"/>
+                  <ListItemText primary="Qnt conventionnelle"/>
                 </ListItemButton>
                 <ListItemButton selected={page[1]} onClick={clickPrix}>
                   <ListItemIcon>

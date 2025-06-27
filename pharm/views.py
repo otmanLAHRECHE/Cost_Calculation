@@ -1373,6 +1373,31 @@ def deleteArticle(request, id):
         return Response(status=status.HTTP_200_OK, data = {"status":"Article deleted"})
 
 
+@api_view(['POST'])
+def generateQntConvByYear(request, year):
+    if request.method == 'POST' and request.user.is_authenticated:
+        
+        queryset = Article.objects.all()
+        print(year)
+        for i in queryset:
+            print(i)
+            
+        return Response(status=status.HTTP_201_CREATED, data={"status": "state generated sucsusfully"}) 
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)  
+    
 
 
+@api_view(['GET'])
+def getAllQntConvByYear(request, year):
+    if request.method == 'GET' and request.user.is_authenticated:
+        queryset = QntConv.objects.filter(year=year)
+
+        qnt_conv_serial = QntConvSerializer(queryset, many=True)
+
+        return Response(status=status.HTTP_200_OK,data=qnt_conv_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)     
 

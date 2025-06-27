@@ -159,6 +159,12 @@ class ArivageItemsCustomSerializer(serializers.ModelSerializer):
         model = Arivage_items
         fields = ['id', 'qnt', 'med_entree', 'bon_arrivage']
 
+class QntConvSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QntConv
+        fields = ['id', 'article', 'year', 'qntMax', 'qntMin','prixUnit','tva']
+
+
 
 
 

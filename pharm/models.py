@@ -128,5 +128,19 @@ class Article(models.Model):
         return self.article_code
 
 
+class QntConv(models.Model):
+    id = models.AutoField(primary_key=True)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    year = models.IntegerField() 
+    qntMax = models.DecimalField(max_digits=20, decimal_places=2)
+    qntMin = models.DecimalField(max_digits=20, decimal_places=2)
+    prixUnit = models.DecimalField(max_digits=20, decimal_places=2)
+    tva = models.IntegerField()
+
+    def __str__(self):
+        return self.id
+
+
+
 
 

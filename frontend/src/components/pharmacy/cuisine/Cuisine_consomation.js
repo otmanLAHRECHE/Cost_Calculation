@@ -4,22 +4,33 @@ import { Box, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
-
+import TextField from '@mui/material/TextField';
+import dayjs from 'dayjs';
 import Paper from '@mui/material/Paper';
-
+import MovieCreationIcon from '@mui/icons-material/MovieCreation';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Container from '@mui/material/Container';
-
-const initialRows = [
-  { id: 1, article: 'حليب', qntMax: 3000, qntMin: 1000, year: 2025, prixUnit: 200, tva: 0 },
-{ id: 2, article: 'حليب', qntMax: 3000, qntMin: 1000, year: 2025, prixUnit: 200, tva: 0 },
-  { id: 3, article: 'حليب', qntMax: 3000, qntMin: 1000, year: 2025, prixUnit: 200, tva: 0 },
-  
-];
-
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import { getAllQntConvByYear, generateState } from '../../../actions/qnt_conv'
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Grid from '@mui/material/Grid';
+import Alt from '../../layouts/alert';
 export default function Cuisine_consomation(){
 
-    const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState({});
+  const [dateFilter, setDateFilter] = React.useState(dayjs());
+  const [dateFilterError, setDateFilterError] = React.useState("");
+  
+  const [response, setResponse] = React.useState("");
+  const [responseSuccesSignal, setResponseSuccesSignal] = React.useState(false);
+  const [responseErrorSignal, setResponseErrorSignal] = React.useState(false);
+    
+  const [loading, setLoading] = React.useState(false);
+  const [loadError, setLoadError ] = React.useState(false);
+  const [data, setData] = React.useState([]);
+  const [dataError, setDataError] = React.useState(false);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -56,8 +67,26 @@ export default function Cuisine_consomation(){
     return updatedRow;
   };
 
+
+  const handleChangeFilterDate = (newValue) =>{
+          setDateFilter(newValue);
+
+          console.log("filter date...", newValue);
+
+        }
+
+  const sauvQntCov = () =>{
+
+        }
+  const generateStateQntCov = async() =>{
+    const token = localStorage.getItem("auth_token");    
+      const year = dateFilter.get('year');
+      setResponse(await generateState(token, year));
+        }
+
   const columns = [
-    { field: 'article', headerName: 'المواد الغذائية', width: 100, editable: false },
+    { field: 'article', headerName: 'المواد الغذائية', width: 100, editable: false , valueGetter: (params) =>
+    `${params.row.article.article_name || ''}` },
     { field: 'qntMax', headerName: 'القيمة القصوى', type: 'number', width: 100, editable: true },
     { field: 'qntMin', headerName: 'القيمة الدنيا', type: 'number', width: 100, editable: true },
     { field: 'year', headerName: 'السنة', type: 'number', width: 100, editable: true },
@@ -85,9 +114,98 @@ export default function Cuisine_consomation(){
     },
   ];
 
+
+  React.useEffect(() => {
+  
+            console.log(response);
+      
+            if (response == "error"){
+              setResponseErrorSignal(true);
+            } else if(response != "") {
+              setResponseSuccesSignal(true);
+            }
+      
+          }, [response]);
+
+
+
+          React.useEffect(() => {
+          
+                    setLoading(true);
+                    setDateFilterError([false, ""]);
+          
+                    const fetchData = async () => {
+                      try {
+                        const token = localStorage.getItem("auth_token");
+                        const year = dateFilter.get('year')
+                        setData(await getAllQntConvByYear(token, year));
+                        setLoading(false);
+                      } catch (error) {
+                        console.log("error", error);
+                      }
+                    };
+                
+                    
+          
+                    if (dateFilter.isValid() == false || dateFilter ==""){
+                      setDateFilterError([true, "une erreur sur le champ de date"]);
+                    
+                    }else{
+                      fetchData();
+                    }
+              
+                    
+              
+                  }, [response, dateFilter]);
+
   return (
     <React.Fragment>
       <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+        <Grid container spacing={2}>
+<Grid item xs={6}>
+
+              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DesktopDatePicker
+                                                        views={['year']}
+                                                        label="Selectioner le mois"
+                                                        value={dateFilter}
+                                                        onChange={handleChangeFilterDate}
+                                                        renderInput={(params) => <TextField {...params} error={dateFilterError[0]}
+                                                        helperText={dateFilterError[1]} 
+                                                        required/>}
+                                                />
+
+              </LocalizationProvider>
+
+              </Paper>
+                
+              </Grid>
+
+              <Grid item xs={6}>
+
+              <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        '& > *': {
+                        m: 1,
+                        },
+                    }}
+                >
+                <ButtonGroup variant="outlined" aria-label="outlined primary button group" orientation="vertical">
+                  <Button startIcon={<MovieCreationIcon />} onClick={generateStateQntCov}>Creation d'état</Button>
+                  <Button startIcon={<SaveAltIcon />} onClick={sauvQntCov}>Sauvgarder</Button>
+                  <Button startIcon={<SaveAltIcon />} onClick={sauvQntCov}>Sauvgarder</Button>
+                </ButtonGroup>
+                </Box>
+                
+              </Grid>
+
+
+          <Grid item xs={12}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
@@ -95,7 +213,7 @@ export default function Cuisine_consomation(){
                                   components={{
                                     Toolbar: GridToolbar,
                                   }}
-        rows={rows}
+        rows={data}
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
@@ -103,6 +221,7 @@ export default function Cuisine_consomation(){
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         experimentalFeatures={{ newEditingApi: true }}
+        loading={loading}
         
         disableSelection={true}
       />
@@ -110,7 +229,17 @@ export default function Cuisine_consomation(){
 
     </Paper>
 
+    </Grid>
+
+    </Grid>
+
     </Container>
+
+    {dataError ? <Alt type='error' message='La liste des items de bon de sorte est vide!!' onClose={()=> setDataError(false)} /> : null}
+    {loadError ? <Alt type='error' message='Des erruers sur les données' onClose={()=> setLoadError(false)}/> : null}
+    {responseSuccesSignal ? <Alt type='success' message='Opération réussie' onClose={()=> setResponseSuccesSignal(false)}/> : null}
+    {responseErrorSignal ? <Alt type='error' message='Opération a échoué' onClose={()=> setResponseErrorSignal(false)}/> : null}
+                           
 
     </React.Fragment>
   );

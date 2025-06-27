@@ -81,4 +81,8 @@ urlpatterns = [
     path('api/add_article/', views.addArticle),
     path('api/update_article/<int:id>', views.updateArticle),
     path('api/delete_article/<int:id>', views.deleteArticle),
+
+    
+    path('api/generate_qnt_conv_by_year/<int:year>', views.generateQntConvByYear),
+    path('api/get_all_qnt_conv_by_year/<int:year>', views.getAllQntConvByYear),
 ]

@@ -1410,3 +1410,36 @@ def deleteQntConvByYear(request, year):
     if request.method == 'DELETE' and request.user.is_authenticated:
         QntConv.objects.filter(year=year).delete()
         return Response(status=status.HTTP_200_OK, data = {"status":"State deleted"})
+    
+
+
+
+@api_view(['POST'])
+def saveStateQntConv(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        
+        id = request.data.pop("id")
+        prixUnit = request.data.pop("prixUnit")
+        qntMax = request.data.pop("qntMax")
+        qntMin = request.data.pop("qntMin")
+        tva = request.data.pop("tva")
+        year = request.data.pop("year")
+
+
+        qnt_to_update = QntConv.objects.get(id=id)
+        if not qnt_to_update.prixUnit == prixUnit:
+            qnt_to_update.prixUnit = prixUnit
+        if not qnt_to_update.qntMax == qntMax:
+            qnt_to_update.qntMax = qntMax
+        if not qnt_to_update.qntMin == qntMin:
+            qnt_to_update.qntMin = qntMin
+        if not qnt_to_update.tva == tva:
+            qnt_to_update.tva = tva
+        if not qnt_to_update.year == year:
+            qnt_to_update.year = year
+        
+        qnt_to_update.save()
+
+        return Response(status=status.HTTP_201_CREATED, data={"status": "state saved sucsusfully"}) 
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)  

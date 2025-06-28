@@ -13,7 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Container from '@mui/material/Container';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import { getAllQntConvByYear, generateState, deleteQntCov } from '../../../actions/qnt_conv'
+import { getAllQntConvByYear, generateState, deleteQntCov, saveStateQntConvF } from '../../../actions/qnt_conv'
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Grid from '@mui/material/Grid';
 import Alt from '../../layouts/alert';
@@ -74,7 +74,7 @@ export default function Cuisine_consomation(){
 
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow };
-    setRows((prevRows) =>
+    setData((prevRows) =>
       prevRows.map((row) => (row.id === newRow.id ? updatedRow : row))
     );
     return updatedRow;
@@ -88,14 +88,35 @@ export default function Cuisine_consomation(){
 
         }
 
-  const sauvQntCov = () =>{
+  const sauvQntCov = async() =>{
+      
+      const token = localStorage.getItem("auth_token");    
+      //setResponse(await saveStateQntConvF(token, data));
+
+      setLoading(true);
+          for(let i = 0;i<data.length; i++){
+            const d = { id: data[i].id,
+                        prixUnit: data[i].prixUnit,
+                        qntMax: data[i].qntMax,
+                        qntMin: data[i].qntMin,
+                        tva: data[i].tva,
+                        year: data[i].year,
+                       };
+
+            if(i == data.length - 1){
+              setResponse(await saveStateQntConvF(token, JSON.stringify(d)));
+            }else{
+              await saveStateQntConvF(token, JSON.stringify(d))
+            }
+          }
+
 
         }
 
 
   const deleteQntCovFunc = () =>{
       
-                          setOpenDelete(true);
+    setOpenDelete(true);
   }
   const generateStateQntCov = async() =>{
     const token = localStorage.getItem("auth_token");    

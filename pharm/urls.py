@@ -86,4 +86,5 @@ urlpatterns = [
     path('api/generate_qnt_conv_by_year/<int:year>', views.generateQntConvByYear),
     path('api/get_all_qnt_conv_by_year/<int:year>', views.getAllQntConvByYear),
     path('api/delete_qnt_conv_by_year/<int:year>', views.deleteQntConvByYear),
+    path('api/save_qnt_conv_by_year/', views.saveStateQntConv),
 ]

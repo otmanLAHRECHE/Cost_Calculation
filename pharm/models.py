@@ -141,6 +141,16 @@ class QntConv(models.Model):
         return self.id
 
 
+class Consomation(models.Model):
+    id = models.AutoField(primary_key=True)
+    qnt_conv = models.ForeignKey(QntConv, on_delete=models.CASCADE)
+    month = models.IntegerField() 
+    year = models.IntegerField() 
+    cons = models.DecimalField(max_digits=20, decimal_places=2)
+
+    def __str__(self):
+        return self.id
+
 
 
 

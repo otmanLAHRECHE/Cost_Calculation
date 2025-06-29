@@ -1443,3 +1443,45 @@ def saveStateQntConv(request):
         return Response(status=status.HTTP_201_CREATED, data={"status": "state saved sucsusfully"}) 
     else :
         return Response(status=status.HTTP_401_UNAUTHORIZED)  
+    
+
+
+
+@api_view(['GET'])
+def getAllConsomationByYearByMonth(request, month, year):
+    if request.method == 'GET' and request.user.is_authenticated:
+        queryset = Consomation.objects.filter(year=year, month = month)
+
+        qnt_conv_serial = ConsomationSerializer(queryset, many=True)
+
+        return Response(status=status.HTTP_200_OK,data=qnt_conv_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)     
+
+
+
+@api_view(['DELETE'])
+def deleteConsomationByYearByMonth(request, month, year):
+    if request.method == 'DELETE' and request.user.is_authenticated:
+        Consomation.objects.filter(year=year, month=month).delete()
+        return Response(status=status.HTTP_200_OK, data = {"status":"Consomation State deleted"})
+    
+
+
+@api_view(['POST'])
+def generateConsomationByYearByMonth(request, month, year):
+    if request.method == 'POST' and request.user.is_authenticated:
+        
+        queryset = Article.objects.all()
+        print(year)
+        print(queryset)
+        for article in queryset:
+            a= Article.objects.get(id=article.id)
+            print(a.article_name)
+            art = QntConv.objects.create(article=a, year=year, qntMax=0.0, qntMin=0.0, prixUnit=0.0, tva=0)
+        return Response(status=status.HTTP_201_CREATED, data={"status": "state generated sucsusfully"}) 
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)  
+ 

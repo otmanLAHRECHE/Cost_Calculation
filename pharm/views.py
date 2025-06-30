@@ -1455,7 +1455,6 @@ def getAllConsomationByYearByMonth(request, month, year):
         qnt_conv_serial = ConsomationSerializer(queryset, many=True)
 
         return Response(status=status.HTTP_200_OK,data=qnt_conv_serial.data)
-                
     
     else :
         return Response(status=status.HTTP_401_UNAUTHORIZED)     

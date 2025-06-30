@@ -38,6 +38,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import LanIcon from '@mui/icons-material/Lan';
 import Cuisine_Articles from './Cuisine_articles';
+import Cuisine_consomation_ultra from './CuisineConsomationUltra';
 
 import Cuisine_consomation from './Cuisine_consomation';
 const drawerWidth = 240;
@@ -132,7 +133,7 @@ function DashboardContent_Cuisine() {
   const clickPrix= () =>{
   
     setPage([false,true,false,false])
-    setToolBar("Prix des Articles")
+    setToolBar("Consomation")
    
   
   };
@@ -277,7 +278,7 @@ function DashboardContent_Cuisine() {
 
         
         {page[0] ? <Cuisine_consomation/> : null}
-        {page[1] ? <Cuisine_Articles/> : null}
+        {page[1] ? <Cuisine_consomation_ultra/> : null}
         {page[2] ? <Cuisine_Articles/> : null}
         {page[3] ? <Cuisine_Articles/> : null}
         

@@ -13,7 +13,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Container from '@mui/material/Container';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import { getAllQntConvByYear, generateState, deleteQntCov, saveStateQntConvF } from '../../../actions/qnt_conv'
+import { getAllConsomationByYearByMonth, generateConsomationByYearByMonth, deleteConsomationByMonthByYear, saveStateConsomation } from '../../../actions/consomation_data';
+
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Grid from '@mui/material/Grid';
 import Alt from '../../layouts/alert';
@@ -96,17 +97,13 @@ export default function Cuisine_consomation_ultra(){
       setLoading(true);
           for(let i = 0;i<data.length; i++){
             const d = { id: data[i].id,
-                        prixUnit: data[i].prixUnit,
-                        qntMax: data[i].qntMax,
-                        qntMin: data[i].qntMin,
-                        tva: data[i].tva,
-                        year: data[i].year,
+                        cons: data[i].cons,
                        };
 
             if(i == data.length - 1){
-              setResponse(await saveStateQntConvF(token, JSON.stringify(d)));
+              setResponse(await saveStateConsomation(token, JSON.stringify(d)));
             }else{
-              await saveStateQntConvF(token, JSON.stringify(d))
+              await saveStateConsomation(token, JSON.stringify(d))
             }
           }
 
@@ -120,18 +117,19 @@ export default function Cuisine_consomation_ultra(){
   }
   const generateStateQntCov = async() =>{
     const token = localStorage.getItem("auth_token");    
-      const year = dateFilter.get('year');
-      setResponse(await generateState(token, year));
+      const year = dateFilter.get('year');  
+      const month = dateFilter.get('month') + 1;
+      setResponse(await generateConsomationByYearByMonth(token, month, year));
         }
 
   const columns = [
     { field: 'article', headerName: 'المواد الغذائية', width: 100, editable: false , valueGetter: (params) =>
-    `${params.row.article.article_name || ''}` },
-    { field: 'qntMax', headerName: 'القيمة القصوى', type: 'number', width: 100, editable: true },
-    { field: 'qntMin', headerName: 'القيمة الدنيا', type: 'number', width: 100, editable: true },
-    { field: 'year', headerName: 'السنة', type: 'number', width: 100, editable: false },
-    { field: 'prixUnit', headerName: 'التسعيرة الوحدوية', type: 'number', width: 100, editable: true },
-    { field: 'tva', headerName: 'TVAضريبة القيمة المضافة', type: 'number', width: 150, editable: true },
+    `${params.row.qnt_conv.article.article_name || ''}` },
+    { field: 'cons', headerName: 'الإستهلاك الشهري', type: 'number', width: 100, editable: true },
+    { field: 'qntMin', headerName: 'الكمية الدنيا', type: 'number', width: 100, editable: false , valueGetter: (params) =>
+    `${params.row.qnt_conv.qntMin || ''}` },
+    { field: 'qntMax', headerName: 'الكمية القصوى', type: 'number', width: 100, editable: false , valueGetter: (params) =>
+    `${params.row.qnt_conv.qntMax || ''}` },
     {
       field: 'actions',
       type: 'actions',
@@ -177,8 +175,9 @@ export default function Cuisine_consomation_ultra(){
                     const fetchData = async () => {
                       try {
                         const token = localStorage.getItem("auth_token");
-                        const year = dateFilter.get('year')
-                        setData(await getAllQntConvByYear(token, year));
+                        const year = dateFilter.get('year');
+                        const month = dateFilter.get('month') + 1;
+                        setData(await getAllConsomationByYearByMonth(token, month, year));
                         setLoading(false);
                       } catch (error) {
                         console.log("error", error);
@@ -208,8 +207,9 @@ export default function Cuisine_consomation_ultra(){
                   
                         setOpenDelete(false);
                         const token = localStorage.getItem("auth_token");
-                        const year = dateFilter.get('year')
-                        setResponse(await deleteQntCov(token, year)); 
+                        const year = dateFilter.get('year');
+                        const month = dateFilter.get('month') + 1;
+                        setResponse(await deleteConsomationByMonthByYear(token, month, year)); 
                   
                       };  
 
@@ -223,7 +223,7 @@ export default function Cuisine_consomation_ultra(){
 
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DesktopDatePicker
-                                                        views={['year']}
+                                                        views={['year', 'month']}
                                                         label="Selectioner le mois"
                                                         value={dateFilter}
                                                         onChange={handleChangeFilterDate}
@@ -299,7 +299,7 @@ export default function Cuisine_consomation_ultra(){
                                 <DialogTitle>{"Confirmer la suppression d'un article"}</DialogTitle>
                                 <DialogContent>
                                   <DialogContentText id="alert-dialog-slide-description">
-                                  هل انت متأكد من حذف جميع اسعار الحصص الخاصة بهذه السنة           
+                                  هل انت متأكد من حذف جميع إستهلاك الحصص الخاصة بهذا الشهر           
                                   </DialogContentText>
                                 </DialogContent>
                                 <DialogActions>

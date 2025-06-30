@@ -149,7 +149,7 @@ class Consomation(models.Model):
     cons = models.DecimalField(max_digits=20, decimal_places=2)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 

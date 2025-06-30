@@ -79,3 +79,29 @@ export async function generateConsomationByYearByMonth(token, month, year){
 };
 
 
+
+export async function saveStateConsomation(token, data){
+      console.log("inside methode", token)
+      const response = await fetch(
+          '/pharm/api/save_consomation/',
+          {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Token ' +token,
+            },
+            body: data
+          }
+      );
+      const text = await response.text();
+      if (response.status === 201) {
+        console.log(JSON.parse(text));
+        return JSON.parse(text);
+      } else {
+        console.log("failed", text);
+        return "error";
+      }
+    
+    };
+

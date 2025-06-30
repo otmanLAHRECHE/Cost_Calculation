@@ -91,4 +91,5 @@ urlpatterns = [
     path('api/generate_consomation_by_year/<int:month>/<int:year>', views.generateConsomationByYearByMonth),
     path('api/get_all_consomation_year/<int:month>/<int:year>', views.getAllConsomationByYearByMonth),
     path('api/delete_consomation/<int:month>/<int:year>', views.deleteConsomationByYearByMonth),
+    path('api/save_consomation/', views.saveStateConsomation),
 ]

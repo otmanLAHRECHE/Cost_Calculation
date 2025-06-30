@@ -167,9 +167,9 @@ class QntConvSerializer(serializers.ModelSerializer):
 
 
 class ConsomationSerializer(serializers.ModelSerializer):
-    QntConv = ArticleSerialize()
+    qnt_conv = QntConvSerializer()
     class Meta:
-        model = QntConv
+        model = Consomation
         fields = ['id', 'qnt_conv', 'month', 'year', 'cons']
 
 

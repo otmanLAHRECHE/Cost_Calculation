@@ -1450,8 +1450,8 @@ def saveStateQntConv(request):
 @api_view(['GET'])
 def getAllConsomationByYearByMonth(request, month, year):
     if request.method == 'GET' and request.user.is_authenticated:
-        queryset = Consomation.objects.filter(year=year, month = month)
-
+        queryset = Consomation.objects.filter(year=year , month = month)
+        
         qnt_conv_serial = ConsomationSerializer(queryset, many=True)
 
         return Response(status=status.HTTP_200_OK,data=qnt_conv_serial.data)
@@ -1473,14 +1473,34 @@ def deleteConsomationByYearByMonth(request, month, year):
 def generateConsomationByYearByMonth(request, month, year):
     if request.method == 'POST' and request.user.is_authenticated:
         
-        queryset = Article.objects.all()
+        queryset = QntConv.objects.filter(year = year)
         print(year)
-        print(queryset)
-        for article in queryset:
-            a= Article.objects.get(id=article.id)
-            print(a.article_name)
-            art = QntConv.objects.create(article=a, year=year, qntMax=0.0, qntMin=0.0, prixUnit=0.0, tva=0)
+        for qnt in queryset:
+            a= QntConv.objects.get(id=qnt.id)
+            print(a.article.article_name)
+            consom = Consomation.objects.create(qnt_conv=a, year=year, month = month, cons = 0.00)
         return Response(status=status.HTTP_201_CREATED, data={"status": "state generated sucsusfully"}) 
     else :
         return Response(status=status.HTTP_401_UNAUTHORIZED)  
  
+
+
+
+@api_view(['POST'])
+def saveStateConsomation(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        
+        id = request.data.pop("id")
+        cons = request.data.pop("cons")
+
+
+        qnt_to_update = Consomation.objects.get(id=id)
+        if not qnt_to_update.cons == cons:
+            qnt_to_update.cons = cons
+        
+        qnt_to_update.save()
+
+        return Response(status=status.HTTP_201_CREATED, data={"status": "state saved sucsusfully"}) 
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)  
+    

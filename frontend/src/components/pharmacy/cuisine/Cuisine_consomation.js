@@ -127,8 +127,8 @@ export default function Cuisine_consomation(){
   const columns = [
     { field: 'article', headerName: 'المواد الغذائية', width: 100, editable: false , valueGetter: (params) =>
     `${params.row.article.article_name || ''}` },
-    { field: 'qntMax', headerName: 'القيمة القصوى', type: 'number', width: 100, editable: true },
-    { field: 'qntMin', headerName: 'القيمة الدنيا', type: 'number', width: 100, editable: true },
+    { field: 'qntMax', headerName: 'الكمية القصوى', type: 'number', width: 100, editable: true },
+    { field: 'qntMin', headerName: 'الكمية الدنيا', type: 'number', width: 100, editable: true },
     { field: 'year', headerName: 'السنة', width: 100, editable: false },
     { field: 'prixUnit', headerName: 'التسعيرة الوحدوية', type: 'number', width: 100, editable: true },
     { field: 'tva', headerName: 'TVAضريبة القيمة المضافة', type: 'number', width: 150, editable: true },

@@ -173,6 +173,21 @@ class ConsomationSerializer(serializers.ModelSerializer):
         fields = ['id', 'qnt_conv', 'month', 'year', 'cons']
 
 
+class ConsomationUltraSerializer(serializers.ModelSerializer):
+    qnt_conv = QntConvSerializer()
+    cons_cumul = serializers.SerializerMethodField()
+
+    def get_cons_cumul(self, obj):
+        this_year = obj.year
+        this_month = obj.month
+        consomation_old = Consomation.objects.filter(year = this_year, month__lte = this_month)
+        cons = ConsomationSerializer(consomation_old)
+        return cons
+
+    class Meta:
+        model = Consomation
+        fields = ['id', 'qnt_conv', 'month', 'year', 'cons','cons_cumul']
+
 
 
 

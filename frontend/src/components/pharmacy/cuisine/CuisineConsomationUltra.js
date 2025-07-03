@@ -265,7 +265,7 @@ export default function Cuisine_consomation_ultra(){
 
           <Grid item xs={12}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-    <Box sx={{ height: 400, width: '100%','& .min': {
+    <Box sx={{ height: 800, width: '100%','& .min': {
                                 backgroundColor: '#ffff1a',
                                 color: '#1a1a00',
                                 },

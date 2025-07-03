@@ -1477,7 +1477,6 @@ def generateConsomationByYearByMonth(request, month, year):
         print(year)
         for qnt in queryset:
             a= QntConv.objects.get(id=qnt.id)
-            print(a.article.article_name)
             consom = Consomation.objects.create(qnt_conv=a, year=year, month = month, cons = 0.00)
         return Response(status=status.HTTP_201_CREATED, data={"status": "state generated sucsusfully"}) 
     else :

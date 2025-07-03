@@ -131,7 +131,7 @@ export default function Cuisine_consomation(){
     { field: 'qntMin', headerName: 'الكمية الدنيا', type: 'number', width: 100, editable: true },
     { field: 'year', headerName: 'السنة', width: 100, editable: false },
     { field: 'prixUnit', headerName: 'التسعيرة الوحدوية', type: 'number', width: 100, editable: true },
-    { field: 'tva', headerName: 'TVAضريبة القيمة المضافة', type: 'number', width: 150, editable: true },
+    { field: 'tva', headerName: 'TVA', type: 'number', width: 150, editable: true },
     {
       field: 'actions',
       type: 'actions',
@@ -262,7 +262,7 @@ export default function Cuisine_consomation(){
 
           <Grid item xs={12}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-    <Box sx={{ height: 400, width: '100%' }}>
+    <Box sx={{ height: 800, width: '100%' }}>
       <DataGrid
       
                                   components={{

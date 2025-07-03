@@ -150,6 +150,30 @@ class Consomation(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
+
+
+
+class Service(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+    
+
+class Repas(models.Model):
+    id = models.AutoField(primary_key=True)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    month = models.IntegerField() 
+    year = models.IntegerField() 
+    repas_malade = models.IntegerField() 
+    repas_pers = models.IntegerField() 
+    repas_autre = models.IntegerField() 
+
+    def __str__(self):
+        return str(self.id)
+
 
 
 

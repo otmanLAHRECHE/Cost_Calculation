@@ -185,7 +185,6 @@ class ConsomationUltraSerializer(serializers.ModelSerializer):
         this_month = obj.month
         consomation_old = Consomation.objects.filter(year = this_year, month__lte = this_month, qnt_conv = obj.qnt_conv)
         for i in consomation_old:
-            print(i.cons)
             cons = cons + i.cons
         return cons
 
@@ -195,7 +194,6 @@ class ConsomationUltraSerializer(serializers.ModelSerializer):
         this_month = obj.month
         consomation_old = Consomation.objects.filter(year = this_year, month__lte = this_month, qnt_conv = obj.qnt_conv)
         for i in consomation_old:
-            print(i.cons)
             cons = cons + i.cons
         
         rest = obj.qnt_conv.qntMin - cons
@@ -207,7 +205,6 @@ class ConsomationUltraSerializer(serializers.ModelSerializer):
         this_month = obj.month
         consomation_old = Consomation.objects.filter(year = this_year, month__lte = this_month, qnt_conv = obj.qnt_conv)
         for i in consomation_old:
-            print(i.cons)
             cons = cons + i.cons
         
         rest = obj.qnt_conv.qntMax - cons
@@ -220,7 +217,18 @@ class ConsomationUltraSerializer(serializers.ModelSerializer):
 
 
 
+class ServiceSerialize(serializers.ModelSerializer):
 
+    class Meta:
+        model = Service
+        fields = ['id', 'name']
+
+
+class RepasSerializer(serializers.ModelSerializer):
+    service = ServiceSerialize()
+    class Meta:
+        model = Repas
+        fields = ['id', 'service', 'month', 'year','repas_malade','repas_pers','repas_autre']
 
 
 

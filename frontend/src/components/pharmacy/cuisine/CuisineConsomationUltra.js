@@ -123,7 +123,7 @@ export default function Cuisine_consomation_ultra(){
         }
 
   const columns = [
-    { field: 'article', headerName: 'المواد الغذائية', width: 140, editable: false , valueGetter: (params) =>
+    { field: 'article', headerName: 'المواد الغذائية', width: 220, editable: false , valueGetter: (params) =>
     `${params.row.qnt_conv.article.article_name || ''}` },
     { field: 'cons', headerName: 'الإستهلاك الشهري', type: 'number', width: 100, editable: true },
     { field: 'cons_cumul', headerName: 'الإستهلاك التراكمي', type: 'number', width: 100, editable: false },

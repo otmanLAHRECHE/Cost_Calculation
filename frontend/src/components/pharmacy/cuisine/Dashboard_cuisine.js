@@ -133,7 +133,7 @@ function DashboardContent_Cuisine() {
   const clickPrix= () =>{
   
     setPage([false,true,false,false])
-    setToolBar("Consomation")
+    setToolBar("Consommation")
    
   
   };

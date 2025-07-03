@@ -1503,3 +1503,84 @@ def saveStateConsomation(request):
     else :
         return Response(status=status.HTTP_401_UNAUTHORIZED)  
     
+
+
+
+
+
+
+
+
+@api_view(['GET'])
+def getAllServices(request):
+    if request.method == 'GET' and request.user.is_authenticated:
+        queryset = Service.objects.all()
+
+        source_serial = ServiceSerialize(queryset, many=True)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
+def getAllServicesNames(request):
+    if request.method == 'GET' and request.user.is_authenticated:
+        queryset = Service.objects.all()
+
+        source_serial = ServiceListSerialize(queryset, many=True)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)     
+
+@api_view(['GET'])
+def getSelectedService(request, id):
+    if request.method == 'GET' and request.user.is_authenticated:
+
+        queryset = Service.objects.get(id=id)
+
+        source_serial = ServiceSerialize(queryset)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)   
+
+@api_view(['POST'])
+def addService(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        name = request.data.pop("name")
+
+        service = Service.objects.create(name=name)
+
+        if service.id is not None:
+            return Response(status=status.HTTP_201_CREATED, data={"status": "service created sucsusfully"}) 
+        
+        else:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def updateService(request, id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        name = request.data.pop("name")
+
+        article_to_update = Service.objects.get(id=id)
+        if not article_to_update.name == name:
+            article_to_update.name = name
+        
+        article_to_update.save()
+        
+        return Response(status=status.HTTP_200_OK, data = {"status":"service updated"})
+
+
+@api_view(['DELETE'])
+def deleteService(request, id):
+    if request.method == 'DELETE' and request.user.is_authenticated:
+        Service.objects.filter(id=id).delete()
+        return Response(status=status.HTTP_200_OK, data = {"status":"Service deleted"})

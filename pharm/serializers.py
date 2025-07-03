@@ -223,6 +223,12 @@ class ServiceSerialize(serializers.ModelSerializer):
         model = Service
         fields = ['id', 'name']
 
+class ServiceListSerialize(serializers.ModelSerializer):
+    label = serializers.CharField(source='name')
+    class Meta:
+        model = Service
+        fields = ['id', 'label']
+
 
 class RepasSerializer(serializers.ModelSerializer):
     service = ServiceSerialize()

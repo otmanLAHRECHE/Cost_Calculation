@@ -92,4 +92,12 @@ urlpatterns = [
     path('api/get_all_consomation_year/<int:month>/<int:year>', views.getAllConsomationByYearByMonth),
     path('api/delete_consomation/<int:month>/<int:year>', views.deleteConsomationByYearByMonth),
     path('api/save_consomation/', views.saveStateConsomation),
+
+
+    path('api/get_all_services/', views.getAllServices),
+    path('api/get_all_services_names/', views.getAllServicesNames),
+    path('api/get_selected_service/<int:id>', views.getSelectedService),
+    path('api/add_service/', views.addService),
+    path('api/update_service/<int:id>', views.updateService),
+    path('api/delete_service/<int:id>', views.deleteService),
 ]

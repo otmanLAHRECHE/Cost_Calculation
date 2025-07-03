@@ -39,6 +39,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import LanIcon from '@mui/icons-material/Lan';
 import Cuisine_Articles from './Cuisine_articles';
 import Cuisine_consomation_ultra from './CuisineConsomationUltra';
+import Cuisine_Services from './Cuisine_services';
 
 import Cuisine_consomation from './Cuisine_consomation';
 const drawerWidth = 240;
@@ -280,7 +281,7 @@ function DashboardContent_Cuisine() {
         {page[0] ? <Cuisine_consomation/> : null}
         {page[1] ? <Cuisine_consomation_ultra/> : null}
         {page[2] ? <Cuisine_Articles/> : null}
-        {page[3] ? <Cuisine_Articles/> : null}
+        {page[3] ? <Cuisine_Services/> : null}
         
         
 

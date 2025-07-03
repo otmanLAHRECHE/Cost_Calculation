@@ -1452,7 +1452,7 @@ def getAllConsomationByYearByMonth(request, month, year):
     if request.method == 'GET' and request.user.is_authenticated:
         queryset = Consomation.objects.filter(year=year , month = month)
         
-        qnt_conv_serial = ConsomationSerializer(queryset, many=True)
+        qnt_conv_serial = ConsomationUltraSerializer(queryset, many=True)
 
         return Response(status=status.HTTP_200_OK,data=qnt_conv_serial.data)
     

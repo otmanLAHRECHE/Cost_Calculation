@@ -176,17 +176,46 @@ class ConsomationSerializer(serializers.ModelSerializer):
 class ConsomationUltraSerializer(serializers.ModelSerializer):
     qnt_conv = QntConvSerializer()
     cons_cumul = serializers.SerializerMethodField()
+    rest_max = serializers.SerializerMethodField()
+    rest_min = serializers.SerializerMethodField()
 
     def get_cons_cumul(self, obj):
+        cons = 0
         this_year = obj.year
         this_month = obj.month
-        consomation_old = Consomation.objects.filter(year = this_year, month__lte = this_month)
-        cons = ConsomationSerializer(consomation_old)
+        consomation_old = Consomation.objects.filter(year = this_year, month__lte = this_month, qnt_conv = obj.qnt_conv)
+        for i in consomation_old:
+            print(i.cons)
+            cons = cons + i.cons
         return cons
 
+    def get_rest_min(self, obj):
+        cons = 0
+        this_year = obj.year
+        this_month = obj.month
+        consomation_old = Consomation.objects.filter(year = this_year, month__lte = this_month, qnt_conv = obj.qnt_conv)
+        for i in consomation_old:
+            print(i.cons)
+            cons = cons + i.cons
+        
+        rest = obj.qnt_conv.qntMin - cons
+        return rest
+    
+    def get_rest_max(self, obj):
+        cons = 0
+        this_year = obj.year
+        this_month = obj.month
+        consomation_old = Consomation.objects.filter(year = this_year, month__lte = this_month, qnt_conv = obj.qnt_conv)
+        for i in consomation_old:
+            print(i.cons)
+            cons = cons + i.cons
+        
+        rest = obj.qnt_conv.qntMax - cons
+        return rest
+    
     class Meta:
         model = Consomation
-        fields = ['id', 'qnt_conv', 'month', 'year', 'cons','cons_cumul']
+        fields = ['id', 'qnt_conv', 'month', 'year', 'cons','cons_cumul','rest_max','rest_min']
 
 
 

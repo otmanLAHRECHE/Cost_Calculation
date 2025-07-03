@@ -123,9 +123,12 @@ export default function Cuisine_consomation_ultra(){
         }
 
   const columns = [
-    { field: 'article', headerName: 'المواد الغذائية', width: 100, editable: false , valueGetter: (params) =>
+    { field: 'article', headerName: 'المواد الغذائية', width: 140, editable: false , valueGetter: (params) =>
     `${params.row.qnt_conv.article.article_name || ''}` },
     { field: 'cons', headerName: 'الإستهلاك الشهري', type: 'number', width: 100, editable: true },
+    { field: 'cons_cumul', headerName: 'الإستهلاك التراكمي', type: 'number', width: 100, editable: false },
+    { field: 'rest_min', headerName: ' الكمية الدنيا المتبقية',cellClassName: 'min', type: 'number', width: 120, editable: false },
+    { field: 'rest_max', headerName:'الكمية القصوى المتبقية', cellClassName: 'max',type: 'number', width: 120, editable: false },
     { field: 'qntMin', headerName: 'الكمية الدنيا', type: 'number', width: 100, editable: false , valueGetter: (params) =>
     `${params.row.qnt_conv.qntMin || ''}` },
     { field: 'qntMax', headerName: 'الكمية القصوى', type: 'number', width: 100, editable: false , valueGetter: (params) =>
@@ -262,7 +265,14 @@ export default function Cuisine_consomation_ultra(){
 
           <Grid item xs={12}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-    <Box sx={{ height: 400, width: '100%' }}>
+    <Box sx={{ height: 400, width: '100%','& .min': {
+                                backgroundColor: '#ffff1a',
+                                color: '#1a1a00',
+                                },
+                                '& .max': {
+                                backgroundColor: '#ff3300',
+                                color: '#000000',
+                                }, }}>
       <DataGrid
       
                                   components={{
@@ -273,6 +283,17 @@ export default function Cuisine_consomation_ultra(){
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={setRowModesModel}
+        getCellClassName={(params) => {
+                                        if (params.field == 'rest_min') {
+                                          return 'min';
+                                        }else if(params.field == 'rest_max'){
+                                           return 'max';
+        
+                                        }else{
+                                            return '';
+        
+                                        }
+                                      }}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         experimentalFeatures={{ newEditingApi: true }}

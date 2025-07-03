@@ -282,7 +282,6 @@ function Copyright(props) {
                                    return 'notyet';
 
                                 }else{
-                                    console.log("expired");
                                     return 'expired';
 
                                 }

@@ -40,7 +40,7 @@ import LanIcon from '@mui/icons-material/Lan';
 import Cuisine_Articles from './Cuisine_articles';
 import Cuisine_consomation_ultra from './CuisineConsomationUltra';
 import Cuisine_Services from './Cuisine_services';
-
+import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import Cuisine_consomation from './Cuisine_consomation';
 const drawerWidth = 240;
 

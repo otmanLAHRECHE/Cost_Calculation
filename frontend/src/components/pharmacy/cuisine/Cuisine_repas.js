@@ -111,6 +111,22 @@ export default function Cuisine_repas(){
   }
   const add_repas = async() =>{
     const token = localStorage.getItem("auth_token");
+
+    setService(null);
+    setDateRepas(null);
+    setRepasAutre("");
+    setRepasMalade("");
+    setRepasPers("");
+
+    setServiceError([false, ""]);
+    setDateRepasError([false, ""]);
+    setRepasAutreError([false, ""]);
+    setRepasMaladeError([false, ""]);
+    setRepasPersError([false, ""]);
+
+
+    setServiceData(await getAllServicesNames(token));
+
   }
 
   const addRepasSave = async() =>{

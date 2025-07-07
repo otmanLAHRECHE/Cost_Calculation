@@ -1636,7 +1636,7 @@ def addRepas(request):
 
         
 
-        if service.id :
+        if repas.id :
             return Response(status=status.HTTP_201_CREATED, data={"status": "create"}) 
         
         else:
@@ -1649,38 +1649,28 @@ def addRepas(request):
 def updateRepas(request, id):
     if request.method == 'POST' and request.user.is_authenticated:
         
+        repas_to_update = Repas.objects.get(id=id)
 
-        bon_arrivage_item_to_update = Arivage_items.objects.get(id=id)
+        repas_malade = request.data.pop("repas_malade")
+        repas_pers = request.data.pop("repas_pers")
+        repas_autre = request.data.pop("repas_autre")
 
-        qnt = request.data.pop("qnt")
-
-        old_value = bon_arrivage_item_to_update.qnt
-
-
+        if not repas_to_update.repas_malade == repas_malade:
+            repas_to_update.repas_malade = repas_malade
+        if not repas_to_update.repas_pers == repas_pers:
+            repas_to_update.repas_pers = repas_pers
+        if not repas_to_update.repas_autre == repas_autre:
+            repas_to_update.repas_autre = repas_autre
         
-
-        if not bon_arrivage_item_to_update.qnt == qnt:
-            if old_value < int(qnt):
-                new_value = int(qnt) - old_value
-                med_stock = Stock.objects.get(id= bon_arrivage_item_to_update.medicament.id)
-                med_stock.stock_qte = med_stock.stock_qte + new_value
-            elif old_value > int(qnt):
-                new_value = old_value - int(qnt)
-                med_stock = Stock.objects.get(id= bon_arrivage_item_to_update.medicament.id)
-                med_stock.stock_qte = med_stock.stock_qte - new_value
-
-
-            bon_arrivage_item_to_update.qnt = qnt
-            med_stock.save()
         
-        bon_arrivage_item_to_update.save()
+        repas_to_update.save()
         
-        return Response(status=status.HTTP_200_OK, data = {"status":"bon arivage item updated"})
+        return Response(status=status.HTTP_200_OK, data = {"status":"repas updated"})
 
 
 @api_view(['DELETE'])
 def deleteRepas(request, id):
     if request.method == 'DELETE' and request.user.is_authenticated:
-        Arivage_items.objects.filter(id=id).delete()
-        return Response(status=status.HTTP_200_OK, data = {"status":"Bon arivage item deleted"})
+        Repas.objects.filter(id=id).delete()
+        return Response(status=status.HTTP_200_OK, data = {"status":"Repas deleted"})
 

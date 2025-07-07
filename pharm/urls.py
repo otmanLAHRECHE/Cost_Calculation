@@ -100,4 +100,10 @@ urlpatterns = [
     path('api/add_service/', views.addService),
     path('api/update_service/<int:id>', views.updateService),
     path('api/delete_service/<int:id>', views.deleteService),
+
+    path('api/add_repas/', views.addRepas),
+    path('api/update_repas/<int:id>', views.updateRepas),
+    path('api/delete_repas/<int:id>', views.deleteRepas),
+    path('api/get_repas/<int:month>/<int:year>', views.getAllReppas),
+
 ]

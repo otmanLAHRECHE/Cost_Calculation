@@ -1632,7 +1632,7 @@ def addRepas(request):
 
         service = Service.objects.get(id=id_service)
 
-        
+        repas = Repas.objects.create(service=service, month=month, year = year, repas_malade = repas_malade, repas_pers = repas_autre, repas_autre = repas_autre)
 
         
 

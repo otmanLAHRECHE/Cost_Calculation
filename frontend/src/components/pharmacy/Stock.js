@@ -67,7 +67,7 @@ export default function Stock(){
     const [qnt, setQnt] = React.useState("");
     const [lot, setLot] = React.useState("");
     const [lotPrice, setLotPrice] = React.useState("");
-
+    
     const [medicNameError, setMedicNameError] = React.useState([false, ""]);
     const [arivageError, setArivageError] = React.useState([false, ""]);
     const [dateArivedError, setDateArivedError] = React.useState([false, ""]);

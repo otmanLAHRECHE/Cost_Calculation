@@ -83,7 +83,7 @@ export async function addRepas(token, data){
     };
 
 
-export async function addRepas(token, id, data){
+export async function updateRepas(token, id, data){
       console.log("inside methode", token)
       const response = await fetch(
           '/pharm/api/update_repas/'+id,

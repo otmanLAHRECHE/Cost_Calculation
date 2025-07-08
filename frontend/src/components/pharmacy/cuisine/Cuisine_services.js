@@ -366,7 +366,7 @@ export default function Cuisine_Services(){
                                 <DialogTitle>{"Confirmer la suppression d'un article"}</DialogTitle>
                                 <DialogContent>
                                   <DialogContentText id="alert-dialog-slide-description">
-                                  هل انت متأكد من حذف هذه المصلحة ستفقد جميع المعلومات الخاصة بها بما في ذلك الإستهلاك
+                                  هل انت متأكد من حذف هذه المصلحة ستفقد جميع المعلومات الخاصة بها    
                                   </DialogContentText>
                                 </DialogContent>
                                 <DialogActions>
@@ -381,7 +381,7 @@ export default function Cuisine_Services(){
         {loadError ? <Alt type='error' message='Des erruers sur les données' onClose={()=> setLoadError(false)}/> : null}
         {responseSuccesSignal ? <Alt type='success' message='Opération réussie' onClose={()=> setResponseSuccesSignal(false)}/> : null}
         {responseErrorSignal ? <Alt type='error' message='Opération a échoué' onClose={()=> setResponseErrorSignal(false)}/> : null}
-        {selectionError ? <Alt type='error' message='Selectioner un médicament' onClose={()=> setSelectionError(false)} /> : null}
+        {selectionError ? <Alt type='error' message='Selectioner un service' onClose={()=> setSelectionError(false)} /> : null}
       
         </React.Fragment>
 

@@ -29,6 +29,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
 
+import Autocomplete from '@mui/material/Autocomplete';
 import Slide from '@mui/material/Slide';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -130,6 +131,62 @@ export default function Cuisine_repas(){
   }
 
   const addRepasSave = async() =>{
+
+    
+        var test = true;
+
+        setRepasAutreError([false,""]);
+        setRepasMaladeError([false,""]);
+        setRepasPersError([false,""]);
+        setServiceError([false,""]);
+        setDateRepasError([false,""]);
+
+        if(repasAutre == null || repasAutre == ""){
+          test = false;
+          setRepasAutreError([true, "champ est obligatoire"]);
+        }
+        if(repasMalade == null || repasMalade == ""){
+          test = false;
+          setRepasMaladeError([true, "champ est obligatoire"]);
+        }
+        if(repasPers == null || repasPers == ""){
+          test = false;
+          setRepasPersError([true, "champ est obligatoire"]);
+        }
+
+        if(service == null || service == ""){
+          test = false;
+          setServiceError([true, "champ est obligatoire"]);
+        }
+
+        if(dateRepas == null || dateRepas == ""){
+            test = false;
+            setDateRepasError([true, "champ est obligatoire"]);
+  
+          }else if(dateRepas.isValid() == false){
+            test = false;
+            setDateRepasError([true, "date n est pas valide"]);
+  
+          }
+
+          if(test){
+
+            setOpen(false);
+
+            const dt = {
+              "id_service":service.id,
+              "month":dateFilter.get('month') + 1,
+              "year":dateFilter.get('year'),
+              "repas_malade": repasMalade,
+              "repas_pers":repasPers,
+              "repas_autre":repasAutre
+            }
+
+            const token = localStorage.getItem("auth_token");
+            setResponse(await addRepas(token, JSON.stringify(dt)));
+
+          }
+
     
   }
 
@@ -316,7 +373,7 @@ export default function Cuisine_repas(){
                                                     console.log(newVlue.id);
                                                 }}
                                                 id="combo-box-demo"
-                                                options={allNames}
+                                                options={allServices}
                                                 sx={{ width: 300 }}
                                                 renderInput={(params) => <TextField {...params} error={serviceError[0]}
                                                 helperText={serviceError[1]} fullWidth variant="standard" label="Service" 
@@ -327,6 +384,7 @@ export default function Cuisine_repas(){
                                             <Grid item xs={6}>
                                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <DesktopDatePicker
+                                                            views={['year', 'month']}
                                                             label="Mois"
                                                             inputFormat="MM/YYYY"
                                                             value={dateRepas}

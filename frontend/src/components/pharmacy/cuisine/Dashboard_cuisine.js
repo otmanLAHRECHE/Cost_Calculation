@@ -42,6 +42,7 @@ import Cuisine_consomation_ultra from './CuisineConsomationUltra';
 import Cuisine_Services from './Cuisine_services';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import Cuisine_consomation from './Cuisine_consomation';
+import Cuisine_repas from './Cuisine_repas';
 const drawerWidth = 240;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -127,13 +128,13 @@ function DashboardContent_Cuisine() {
 
   const clickConsomation = () =>{
     
-      setPage([true,false,false,false])
+      setPage([true,false,false,false,false])
       setToolBar("Quantité conventionnelle")
   };
 
   const clickPrix= () =>{
   
-    setPage([false,true,false,false])
+    setPage([false,true,false,false,false])
     setToolBar("Consommation")
    
   
@@ -141,19 +142,26 @@ function DashboardContent_Cuisine() {
 
   const clickArticles = () =>{
   
-    setPage([false,false,true,false])
+    setPage([false,false,true,false,false])
     setToolBar("Liste des articles")
   
   };
   const clickServices= () =>{
   
-    setPage([false,false,false,true])
+    setPage([false,false,false,true,false])
     setToolBar("Services")
   
   };
 
+  const clickRepas= () =>{
+  
+    setPage([false,false,false,false,true])
+    setToolBar("Repas")
+  
+  };
 
-  const [page, setPage] = React.useState([true,false,false,false]);
+
+  const [page, setPage] = React.useState([true,false,false,false,false]);
   
   if(localStorage.getItem("auth_token")==null && logOut == true){
     window.location.reload();
@@ -258,6 +266,17 @@ function DashboardContent_Cuisine() {
                   </ListItemIcon>
                   <ListItemText primary="Services" />
                 </ListItemButton>
+                 <Divider sx={{ my: 1 }} />
+                    <ListSubheader component="div" inset>
+                      Consomation des repas
+                    </ListSubheader>
+
+                    <ListItemButton selected={page[4]} onClick={clickRepas}>
+                  <ListItemIcon>
+                    <LocalDiningIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Repas" />
+                </ListItemButton>
                 
                 
                     
@@ -282,6 +301,7 @@ function DashboardContent_Cuisine() {
         {page[1] ? <Cuisine_consomation_ultra/> : null}
         {page[2] ? <Cuisine_Articles/> : null}
         {page[3] ? <Cuisine_Services/> : null}
+        {page[4] ? <Cuisine_repas/> : null}
         
         
 

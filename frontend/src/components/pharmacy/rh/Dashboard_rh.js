@@ -43,7 +43,7 @@ import GradeIcon from '@mui/icons-material/Grade';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import RequestPageIcon from '@mui/icons-material/RequestPage';
 import Cuisine_Grades from "./Rh_grades";
-const drawerWidth = 240;
+const drawerWidth = 190;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

@@ -85,7 +85,7 @@ export default function Cuisine_Grades(){
         setOpen(false);
 
         const data = {
-          name:medicName,
+          grade_name:medicName,
         }
 
         console.log("data", JSON.stringify(data));
@@ -121,7 +121,7 @@ export default function Cuisine_Grades(){
         setOpenUpdate(false);
 
         const data = {
-          name:medicName,
+          grade_name:medicName,
         }
 
         const token = localStorage.getItem("auth_token");

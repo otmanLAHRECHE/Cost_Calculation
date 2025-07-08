@@ -105,5 +105,6 @@ urlpatterns = [
     path('api/update_repas/<int:id>', views.updateRepas),
     path('api/delete_repas/<int:id>', views.deleteRepas),
     path('api/get_repas/<int:month>/<int:year>', views.getAllReppas),
+    path('api/get_selected_repas/<int:id>', views.getSelectedRepas),
 
 ]

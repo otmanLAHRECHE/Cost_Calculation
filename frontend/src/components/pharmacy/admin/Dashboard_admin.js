@@ -220,12 +220,6 @@ function DashboardAdminContent() {
                   </ListItemIcon>
                   <ListItemText primary="Users"/>
                 </ListItemButton>
-                <ListItemButton selected={page[1]} onClick={clickEmplacements}>
-                  <ListItemIcon>
-                    <InventoryIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Emplacements" />
-                </ListItemButton>
                
 
                     
@@ -247,7 +241,6 @@ function DashboardAdminContent() {
 
         
         {page[0] ? <ListUsers/> : null}
-        {page[1] ? <Statestiques/> : null}
         
 
         

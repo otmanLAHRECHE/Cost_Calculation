@@ -1602,6 +1602,21 @@ def deleteService(request, id):
 
 
 @api_view(['GET'])
+def getSelectedRepas(request, id):
+    if request.method == 'GET' and request.user.is_authenticated:
+
+        queryset = Repas.objects.get(id=id)
+
+        source_serial = RepasSerializer(queryset)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)   
+
+
+
+@api_view(['GET'])
 def getAllReppas(request, month, year):
     if request.method == 'GET' and request.user.is_authenticated:
 

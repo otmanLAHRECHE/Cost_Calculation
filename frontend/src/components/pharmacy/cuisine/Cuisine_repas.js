@@ -18,7 +18,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Container from '@mui/material/Container';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import { getAllServicesNames } from '../../../actions/services_data';
-import { getAllRepasByYearByMonth, addRepas, updateRepas, deleteRepas } from '../../../actions/repas_data';
+import { getAllRepasByYearByMonth, addRepas, updateRepas, deleteRepas, getSelectedRepas } from '../../../actions/repas_data';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Grid from '@mui/material/Grid';
 import Alt from '../../layouts/alert';
@@ -43,6 +43,7 @@ export default function Cuisine_repas(){
   const [response, setResponse] = React.useState("");
   const [responseSuccesSignal, setResponseSuccesSignal] = React.useState(false);
   const [responseErrorSignal, setResponseErrorSignal] = React.useState(false);
+
     
   const [dateRepas, setDateRepas] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -76,28 +77,17 @@ export default function Cuisine_repas(){
 
   const handleChangeFilterDate = (newValue) =>{
           setDateFilter(newValue);
-
-          console.log("filter date...", newValue);
-
         }
 
   const edit_repas = async() =>{
-      
-      const token = localStorage.getItem("auth_token");    
-      //setResponse(await saveStateQntConvF(token, data));
 
-      setLoading(true);
-          for(let i = 0;i<data.length; i++){
-            const d = { id: data[i].id,
-                        cons: data[i].cons,
-                       };
-
-            if(i == data.length - 1){
-              setResponse(await saveStateConsomation(token, JSON.stringify(d)));
-            }else{
-              await saveStateConsomation(token, JSON.stringify(d))
-            }
-          }
+              if(selectionModel.length == 0){
+                setSelectionError(true);
+              }else{    
+                const token = localStorage.getItem("auth_token");
+        
+                setRowData(await getSelectedRepas(token, selectionModel[0])); 
+              }
 
 
         }
@@ -127,6 +117,50 @@ export default function Cuisine_repas(){
 
 
     setServiceData(await getAllServicesNames(token));
+
+  }
+
+
+  const editRepasClose = () =>{
+    setOpenUpdate(false);
+  }
+
+  const editRepasSave = async() =>{
+    var test = true;
+
+    setRepasAutreError([false,""]);
+        setRepasMaladeError([false,""]);
+        setRepasPersError([false,""]);
+
+
+         if(repasAutre == null || repasAutre == ""){
+          test = false;
+          setRepasAutreError([true, "champ est obligatoire"]);
+        }
+        if(repasMalade == null || repasMalade == ""){
+          test = false;
+          setRepasMaladeError([true, "champ est obligatoire"]);
+        }
+        if(repasPers == null || repasPers == ""){
+          test = false;
+          setRepasPersError([true, "champ est obligatoire"]);
+        }
+
+
+        if(test){
+
+            setOpenUpdate(false);
+
+            const dt = {
+              "repas_malade": repasMalade,
+              "repas_pers":repasPers,
+              "repas_autre":repasAutre
+            }
+
+            const token = localStorage.getItem("auth_token");
+            setResponse(await updateRepas(token, JSON.stringify(dt), rowData.id));
+
+          }
 
   }
 
@@ -202,6 +236,7 @@ export default function Cuisine_repas(){
     { field: 'repas_malade', headerName: 'عدد الوجبات الخاصة بالمرضى', type: 'number', width: 200},
     { field: 'repas_pers', headerName: 'عدد الوجبات الخاصة بالمناوبين', type: 'number', width: 200},
     { field: 'repas_autre', headerName: 'أخرى', type: 'number', width: 130},
+    { field: 'repas_total', headerName: 'مجموع الوجبات الشهري للمصلحة/المعني', type: 'number', width: 220},
   ];
 
 
@@ -281,6 +316,34 @@ export default function Cuisine_repas(){
                       const handleChangeDateRepas = (newValue) => {
                                setDateRepas(newValue);
                          };
+
+
+                          React.useEffect(() => {
+                                 try{
+                           
+                                   if (rowData == "no data"){
+                                     setResponseErrorSignal(true);
+                                   } else if(rowData != "") {
+                             
+                                   setOpenUpdate(true);
+                             
+                                   setService(rowData.service.name);
+                                   setRepasAutre(rowData.repas_autre);
+                                   setRepasMalade(rowData.repas_malade);
+                                   setRepasPers(rowData.repas_pers);
+                           
+                                   setServiceError([false, ""]);
+                                   setDateRepasError([false, ""]);
+                                   setRepasAutreError([false, ""]);
+                                   setRepasMaladeError([false, ""]);
+                                   setRepasPersError([false, ""]);
+                           
+                                   }
+                                 }catch(e){
+                                   console.log(e)
+                                 }
+                           
+                               }, [rowData]);
 
   return (
     <React.Fragment>
@@ -462,6 +525,108 @@ export default function Cuisine_repas(){
 
 
 
+      <Dialog open={openUpdate} onClose={editRepasClose}  maxWidth="md" fullWidth={true}>
+                              <DialogTitle>Editer repas record</DialogTitle>
+                                  <DialogContent>
+    
+                                  
+                                  <Grid container spacing={2}>
+                                            <Grid item xs={6}>
+                                            <Autocomplete
+                                                disablePortal
+                                                value={service}
+                                                onChange={async (event, newVlue) =>{
+                                                    setService(newVlue);
+                                                    console.log(newVlue.id);
+                                                }}
+                                                id="combo-box-demo"
+                                                options={allServices}
+                                                sx={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} error={serviceError[0]}
+                                                helperText={serviceError[1]} fullWidth variant="standard" label="Service" 
+                                                required/>}
+                                            />
+    
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <DesktopDatePicker
+                                                            views={['year', 'month']}
+                                                            label="Mois"
+                                                            inputFormat="MM/YYYY"
+                                                            value={dateRepas}
+                                                            disabled = {true}
+                                                            onChange={handleChangeDateRepas}
+                                                            renderInput={(params) => <TextField {...params} error={dateRepasError[0]}
+                                                            helperText={dateRepasError[1]} 
+                                                            required/>}
+                                                    />
+    
+                                                </LocalizationProvider> 
+                                            
+                                            </Grid>
+    
+                                  </Grid>
+    
+                                  <br></br>
+                                  
+                                <Grid container spacing={2}>
+                                                <Grid item xs={4}>
+                                           <TextField
+                                                error={repasMaladeError[0]}
+                                                helperText={repasMaladeError[1]}
+                                                required
+                                                margin="dense"
+                                                label="Repas malade"
+                                                fullWidth
+                                                variant="standard"
+                                                value = {repasMalade}
+                                                onChange={(event) => {setRepasMalade(event.target.value)}}
+                                              />
+    
+                                                </Grid>
+    
+                                                <Grid item xs={4}>
+                                           <TextField
+                                                error={repasPersError[0]}
+                                                helperText={repasPersError[1]}
+                                                required
+                                                margin="dense"
+                                                label="Repas Pers de garde"
+                                                fullWidth
+                                                variant="standard"
+                                                value = {repasPers}
+                                                onChange={(event) => {setRepasPers(event.target.value)}}
+                                              />
+    
+                                                </Grid>
+
+                                                 <Grid item xs={4}>
+                                           <TextField
+                                                error={repasAutreError[0]}
+                                                helperText={repasAutreError[1]}
+                                                required
+                                                margin="dense"
+                                                label="Autre"
+                                                fullWidth
+                                                variant="standard"
+                                                value = {repasAutre}
+                                                onChange={(event) => {setRepasAutre(event.target.value)}}
+                                              />
+    
+                                                </Grid>
+                                </Grid>
+
+                               
+                                  </DialogContent>
+                                  <DialogActions>
+                                    <Button onClick={editRepasClose}>Anuller</Button>
+                                    <Button onClick={editRepasSave}>Sauvgarder</Button>
+                                  </DialogActions>
+                </Dialog>
+
+
+
     <Dialog open={openDelete}
                                 TransitionComponent={Transition}
                                 keepMounted
@@ -486,6 +651,7 @@ export default function Cuisine_repas(){
     {loadError ? <Alt type='error' message='Des erruers sur les données' onClose={()=> setLoadError(false)}/> : null}
     {responseSuccesSignal ? <Alt type='success' message='Opération réussie' onClose={()=> setResponseSuccesSignal(false)}/> : null}
     {responseErrorSignal ? <Alt type='error' message='Opération a échoué' onClose={()=> setResponseErrorSignal(false)}/> : null}
+    {selectionError ? <Alt type='error' message='Selectioner un repas record' onClose={()=> setSelectionError(false)} /> : null}
                            
 
     </React.Fragment>

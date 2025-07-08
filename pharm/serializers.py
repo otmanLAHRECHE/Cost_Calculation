@@ -232,9 +232,19 @@ class ServiceListSerialize(serializers.ModelSerializer):
 
 class RepasSerializer(serializers.ModelSerializer):
     service = ServiceSerialize()
+    repas_total = serializers.SerializerMethodField()
+
+
+
+    def get_repas_total(self, obj):
+        total = int(obj.repas_malade) + int(obj.repas_pers) + int(obj.repas_autre)
+        
+        return total
+    
+
     class Meta:
         model = Repas
-        fields = ['id', 'service', 'month', 'year','repas_malade','repas_pers','repas_autre']
+        fields = ['id', 'service', 'month', 'year','repas_malade','repas_pers','repas_autre','repas_total']
 
 
 

@@ -202,7 +202,7 @@ export default function Cuisine_Services(){
         } else if(rowData != "") {
   
         setOpenUpdate(true);
-        setMedicName(rowData.article_name);
+        setMedicName(rowData.name);
         setMedicNameError([false, ""]);
         }
       }catch(e){

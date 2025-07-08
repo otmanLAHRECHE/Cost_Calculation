@@ -255,7 +255,7 @@ class GradeSerialize(serializers.ModelSerializer):
 
     class Meta:
         model = Grade
-        fields = ['id', 'name']
+        fields = ['id', 'grade_name']
 
 class GradeListSerialize(serializers.ModelSerializer):
     label = serializers.CharField(source='name')

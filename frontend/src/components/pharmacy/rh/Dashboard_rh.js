@@ -42,6 +42,7 @@ import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import GradeIcon from '@mui/icons-material/Grade';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import RequestPageIcon from '@mui/icons-material/RequestPage';
+import Cuisine_Grades from "./Rh_grades";
 const drawerWidth = 240;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -287,7 +288,7 @@ function DashboardContent_Rh() {
         {page[0] ? <Cuisine_Services/> : null}
         {page[1] ? <Cuisine_Services/> : null}
         {page[2] ? <Cuisine_Services/> : null}
-        {page[3] ? <Cuisine_Services/> : null}
+        {page[3] ? <Cuisine_Grades/> : null}
         
         
 

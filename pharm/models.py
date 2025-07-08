@@ -173,6 +173,15 @@ class Repas(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
+
+
+class Grade(models.Model):
+    id = models.AutoField(primary_key=True)
+    grade_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.grade_name
 
 
 

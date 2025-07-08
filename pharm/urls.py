@@ -107,4 +107,12 @@ urlpatterns = [
     path('api/get_repas/<int:month>/<int:year>', views.getAllReppas),
     path('api/get_selected_repas/<int:id>', views.getSelectedRepas),
 
+
+    path('api/get_all_grades/', views.getAllGrades),
+    path('api/get_all_grades_names/', views.getAllGradesNames),
+    path('api/get_selected_grade/<int:id>', views.getSelectedGrade),
+    path('api/add_grade/', views.addGrade),
+    path('api/update_grade/<int:id>', views.updateGrade),
+    path('api/delete_grade/<int:id>', views.deleteGrade),
+
 ]

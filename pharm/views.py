@@ -1689,3 +1689,92 @@ def deleteRepas(request, id):
         Repas.objects.filter(id=id).delete()
         return Response(status=status.HTTP_200_OK, data = {"status":"Repas deleted"})
 
+
+
+
+
+
+
+
+
+
+
+
+
+@api_view(['GET'])
+def getAllGrades(request):
+    if request.method == 'GET' and request.user.is_authenticated:
+        queryset = Grade.objects.all()
+
+        source_serial = GradeSerialize(queryset, many=True)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
+def getAllGradesNames(request):
+    if request.method == 'GET' and request.user.is_authenticated:
+        queryset = Grade.objects.all()
+
+        source_serial = GradeListSerialize(queryset, many=True)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)     
+
+@api_view(['GET'])
+def getSelectedGrade(request, id):
+    if request.method == 'GET' and request.user.is_authenticated:
+
+        queryset = Grade.objects.get(id=id)
+
+        source_serial = GradeSerialize(queryset)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)   
+
+@api_view(['POST'])
+def addGrade(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        name = request.data.pop("grade_name")
+
+        service = Grade.objects.create(grade_name=name)
+
+        if service.id is not None:
+            return Response(status=status.HTTP_201_CREATED, data={"status": "grade created sucsusfully"}) 
+        
+        else:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def updateGrade(request, id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        name = request.data.pop("grade_name")
+
+        article_to_update = Grade.objects.get(id=id)
+        if not article_to_update.grade_name == name:
+            article_to_update.grade_name = name
+        
+        article_to_update.save()
+        
+        return Response(status=status.HTTP_200_OK, data = {"status":"grade updated"})
+
+
+@api_view(['DELETE'])
+def deleteGrade(request, id):
+    if request.method == 'DELETE' and request.user.is_authenticated:
+        Grade.objects.filter(id=id).delete()
+        return Response(status=status.HTTP_200_OK, data = {"status":"grade deleted"})
+    
+
+
+

@@ -251,5 +251,17 @@ class RepasSerializer(serializers.ModelSerializer):
 
 
 
+class GradeSerialize(serializers.ModelSerializer):
+
+    class Meta:
+        model = Grade
+        fields = ['id', 'name']
+
+class GradeListSerialize(serializers.ModelSerializer):
+    label = serializers.CharField(source='name')
+    class Meta:
+        model = Grade
+        fields = ['id', 'label']
+
 
 

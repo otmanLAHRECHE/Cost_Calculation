@@ -33,7 +33,7 @@ import ListUsers from './List_users';
 import GroupIcon from '@mui/icons-material/Group';
 import InventoryIcon from '@mui/icons-material/Inventory';
 
-const drawerWidth = 240;
+const drawerWidth = 150;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

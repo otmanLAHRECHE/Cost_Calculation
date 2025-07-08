@@ -196,7 +196,7 @@ function DashboardContent_Rh() {
               {toolBar}
             </Typography>
 
-            <Button color="inherit" startIcon={<ThreePRoundedIcon />}>Cuisine</Button>
+            <Button color="inherit" startIcon={<ThreePRoundedIcon />}>RH</Button>
             <FiberManualRecordIcon
                 fontSize="small"
                   sx={{

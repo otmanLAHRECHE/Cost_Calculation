@@ -258,7 +258,7 @@ class GradeSerialize(serializers.ModelSerializer):
         fields = ['id', 'grade_name']
 
 class GradeListSerialize(serializers.ModelSerializer):
-    label = serializers.CharField(source='name')
+    label = serializers.CharField(source='grade_name')
     class Meta:
         model = Grade
         fields = ['id', 'label']
@@ -270,6 +270,6 @@ class PersonnelSerialize(serializers.ModelSerializer):
     grade = GradeSerialize()
 
     class Meta:
-        model = Grade
+        model = Personnel
         fields = ['id', 'full_name', 'service', 'grade']
 

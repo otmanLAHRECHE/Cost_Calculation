@@ -31,15 +31,22 @@ import Container from '@mui/material/Container';
 
 import Grid from '@mui/material/Grid';
 
-import { getAllGrades , addNewGrade, updateGrade, getSelectedGrade, deleteGrade } from '../../../actions/grade_data'
+import Autocomplete from '@mui/material/Autocomplete';
 
-
+import { getAllGradesNames } from '../../../actions/grade_data'
+import { getAllServicesNames } from '../../../actions/services_data'
+import { getAllPers, addNewPers, updatePers, getSelectedPers, deletePers } from '../../../actions/pers_data'
 
 import Alt from '../../layouts/alert';
+import { deleteRepas } from '../../../actions/repas_data';
 
 const columns = [
     { field: 'id', headerName: 'Id', width: 70 },
-    { field: 'grade_name', headerName: 'الرتبة', width: 220 },
+    { field: 'full_name', headerName: 'الإسم و اللقب', width: 220 },
+    { field: 'service', headerName: 'المصلحة', width: 220, valueGetter: (params) =>
+    `${params.row.service.name || ''}` },
+    { field: 'grade', headerName: 'الرتبة', width: 220 , valueGetter: (params) =>
+    `${params.row.grade.grade_name || ''}` },
   ];
 
   const Transition = React.forwardRef(function Transition(props, ref) {
@@ -68,6 +75,19 @@ export default function Rh_emp(){
     const [typeValue, setTypeValue] = React.useState();
     const [rowData, setRowData] = React.useState("");
     
+
+    const [serviceError, setServiceError] = React.useState([false, ""]);
+      const [service, setService] = React.useState(null);
+      
+      const [allServices, setAllServices] = React.useState([]);
+      const [serviceData, setServiceData] = React.useState([]);
+
+
+      const [gradeError, setGradeError] = React.useState([false, ""]);
+        const [grade, setGrade] = React.useState(null);
+        
+        const [allGrades, setAllGrades] = React.useState([]);
+        const [gradeData, setGradeData] = React.useState([]);
     
 
     const addMedicSave = async () => {
@@ -75,27 +95,37 @@ export default function Rh_emp(){
 
       var test = true;
 
-      setMedicNameError([false, ""])
+      setMedicNameError([false, ""]);
+      setServiceError([false, ""]);
+      setGradeError([false, ""]);
 
 
       if (medicName == ""){
         setMedicNameError([true,"Ce champ est obligatoire"])
         test = false;
       }
+      if(service == null || service == ""){
+          test = false;
+          setServiceError([true, "champ est obligatoire"]);
+        }
+
+        if(grade == null || grade == ""){
+          test = false;
+          setGradeError([true, "champ est obligatoire"]);
+        }
 
       if (test){
         setOpen(false);
 
         const data = {
-          grade_name:medicName,
+          full_name:medicName,
+          service_id:service.id,
+          grade_id:grade.id,
         }
-
-        console.log("data", JSON.stringify(data));
-
 
         const token = localStorage.getItem("auth_token");
 
-        setResponse(await addNewGrade(token, JSON.stringify(data))); 
+        setResponse(await addNewPers(token, JSON.stringify(data))); 
         
       }
       else{
@@ -111,23 +141,37 @@ export default function Rh_emp(){
 
       var test = true;
 
-      setMedicNameError([false, ""])
+      setMedicNameError([false, ""]);
+      setServiceError([false, ""]);
+      setGradeError([false, ""]);
+
 
 
       if (medicName == ""){
         setMedicNameError([true,"Ce champ est obligatoire"])
         test = false;
       }
+      if(service == null || service == ""){
+          test = false;
+          setServiceError([true, "champ est obligatoire"]);
+        }
+
+        if(grade == null || grade == ""){
+          test = false;
+          setGradeError([true, "champ est obligatoire"]);
+        }
 
       if (test){
         setOpenUpdate(false);
 
         const data = {
-          grade_name:medicName,
+          full_name:medicName,
+          service_id:service.id,
+          grade_id:grade.id,
         }
 
         const token = localStorage.getItem("auth_token");
-        setResponse(await updateGrade(token, JSON.stringify(data), rowData.id)); 
+        setResponse(await updatePers(token, JSON.stringify(data), rowData.id)); 
 
         setOpenUpdate(false);
         
@@ -141,13 +185,21 @@ export default function Rh_emp(){
 
    
 
-    const addMedicOpen = () => {
+    const addMedicOpen = async() => {
 
       
+    const token = localStorage.getItem("auth_token");
       
       setOpen(true);
       setMedicName("");
       setMedicNameError([false, ""])
+      setService(null);
+      setGrade(null);
+      setServiceError([false, ""])
+      setGradeError([false, ""])
+
+
+      setServiceData(await getAllServicesNames(token));
     };
     const addMedicClose = () => {
       setOpen(false);
@@ -162,7 +214,7 @@ export default function Rh_emp(){
       }else{    
         const token = localStorage.getItem("auth_token");
 
-        setRowData(await getSelectedGrade(token, selectionModel[0])); 
+        setRowData(await getSelectedPers(token, selectionModel[0])); 
       }
 
     };
@@ -191,7 +243,7 @@ export default function Rh_emp(){
 
       setOpenDelete(false);
       const token = localStorage.getItem("auth_token");
-      setResponse(await deleteGrade(token, selectionModel[0])); 
+      setResponse(await deletePers(token, selectionModel[0])); 
 
     };   
 
@@ -204,8 +256,15 @@ export default function Rh_emp(){
         } else if(rowData != "") {
   
         setOpenUpdate(true);
-        setMedicName(rowData.grade_name);
+        setMedicName(rowData.full_name);
+        setService(rowData.service.name);
+        setGrade(rowData.grade.grade_name);
+        
+
+
         setMedicNameError([false, ""]);
+        setServiceError([false, ""]);
+
         }
       }catch(e){
         console.log(e)
@@ -232,7 +291,7 @@ export default function Rh_emp(){
       const fetchData = async () => {
         try {
           const token = localStorage.getItem("auth_token");
-          setData(await getAllGrades(token));
+          setData(await getAllPers(token));
           setLoading(false);
         } catch (error) {
           console.log("error", error);
@@ -245,6 +304,42 @@ export default function Rh_emp(){
 
 
 
+    React.useEffect(() =>{
+
+                  console.log("fetch grade");
+
+                  const fetch_grade = async() =>{
+                      const token = localStorage.getItem("auth_token");
+                      setGradeData(await getAllGradesNames(token));
+                  }
+                      try{
+                        if (serviceData == "no data"){
+                          setResponseErrorSignal(true);
+                        } else if(serviceData != "") {
+                          setAllServices(serviceData);
+                          fetch_grade();
+                        }
+                      }catch(e){
+                        console.log(e);
+                      }
+                    }, [serviceData]);
+
+
+     React.useEffect(() =>{
+      
+                  console.log("start grade");
+
+                       try{
+                           if (gradeData == "no data"){
+                                          setResponseErrorSignal(true);
+                              } else if(gradeData != "") {
+                                          setAllGrades(gradeData);
+                                          setOpen(true);
+                                  }
+                                   }catch(e){
+                                        console.log(e);
+                                  }
+                         }, [gradeData]);
 
 
     return(
@@ -283,7 +378,7 @@ export default function Rh_emp(){
                           aria-labelledby="nested-list-subheader"
                           subheader={
                             <ListSubheader component="div" id="nested-list-subheader">
-                            إدارة الرتب 
+                            إدارة المستخدمين 
                             </ListSubheader>
                           }
                         >
@@ -321,11 +416,38 @@ export default function Rh_emp(){
                               margin="dense"
                               name="medic_name"
                               id="medic_name"
-                              label="تسمية الرتبة "
+                              label="الإسم و اللقب"
                               fullWidth
                               variant="standard"
                               onChange={(event) => {setMedicName(event.target.value)}}
                             />
+
+                            <Autocomplete
+                                                disablePortal
+                                                value={service}
+                                                onChange={async (event, newVlue) =>{
+                                                    setService(newVlue);
+                                                }}
+                                                id="combo-box-demo"
+                                                options={allServices}
+                                                sx={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} error={serviceError[0]}
+                                                helperText={serviceError[1]} fullWidth variant="standard" label="المصلحة" 
+                                                required/>}
+                                            />
+                            <Autocomplete
+                                                 disablePortal
+                                                 value={grade}
+                                                 onChange={async (event, newVlue) =>{
+                                                     setGrade(newVlue);
+                                                 }}
+                                                 id="combo-box-demo"
+                                                 options={allGrades}
+                                                 sx={{ width: 300 }}
+                                                 renderInput={(params) => <TextField {...params} error={gradeError[0]}
+                                                 helperText={gradeError[1]} fullWidth variant="standard" label="الرتبة" 
+                                                 required/>}
+                                             /> 
                           </DialogContent>
                           <DialogActions>
                             <Button onClick={addMedicClose}>رجوع</Button>
@@ -344,12 +466,38 @@ export default function Rh_emp(){
                             margin="dense"
                             name="medic_name"
                             id="medic_name"
-                            label="تسمية الرتبة "
+                            label="الإسم و اللقب"
                             fullWidth
                             variant="standard"
                             value={medicName}
                             onChange={(event) => {setMedicName(event.target.value)}}
                           />
+                            <Autocomplete
+                                                disablePortal
+                                                value={service}
+                                                onChange={async (event, newVlue) =>{
+                                                    setService(newVlue);
+                                                }}
+                                                id="combo-box-demo"
+                                                options={allServices}
+                                                sx={{ width: 300 }}
+                                                renderInput={(params) => <TextField {...params} error={serviceError[0]}
+                                                helperText={serviceError[1]} fullWidth variant="standard" label="المصلحة" 
+                                                required/>}
+                                            />
+                                  <Autocomplete
+                                                 disablePortal
+                                                 value={grade}
+                                                 onChange={async (event, newVlue) =>{
+                                                     setGrade(newVlue);
+                                                 }}
+                                                 id="combo-box-demo"
+                                                 options={allGrades}
+                                                 sx={{ width: 300 }}
+                                                 renderInput={(params) => <TextField {...params} error={gradeError[0]}
+                                                 helperText={gradeError[1]} fullWidth variant="standard" label="الرتبة" 
+                                                 required/>}
+                                             />                     
                               
                         </DialogContent>
                         <DialogActions>
@@ -368,7 +516,7 @@ export default function Rh_emp(){
                                 <DialogTitle>{"Confirmer la suppression d'un article"}</DialogTitle>
                                 <DialogContent>
                                   <DialogContentText id="alert-dialog-slide-description">
-                                  هل انت متأكد من حذف هذه الرتبة ستفقد جميع عامل بهذه الرتبة      
+                                هل انت متأكد منه الحذف        
                                   </DialogContentText>
                                 </DialogContent>
                                 <DialogActions>
@@ -383,7 +531,7 @@ export default function Rh_emp(){
         {loadError ? <Alt type='error' message='Des erruers sur les données' onClose={()=> setLoadError(false)}/> : null}
         {responseSuccesSignal ? <Alt type='success' message='Opération réussie' onClose={()=> setResponseSuccesSignal(false)}/> : null}
         {responseErrorSignal ? <Alt type='error' message='Opération a échoué' onClose={()=> setResponseErrorSignal(false)}/> : null}
-        {selectionError ? <Alt type='error' message='Selectioner un grade' onClose={()=> setSelectionError(false)} /> : null}
+        {selectionError ? <Alt type='error' message='Selectioner un Epl' onClose={()=> setSelectionError(false)} /> : null}
       
         </React.Fragment>
 

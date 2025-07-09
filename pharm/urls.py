@@ -115,4 +115,11 @@ urlpatterns = [
     path('api/update_grade/<int:id>', views.updateGrade),
     path('api/delete_grade/<int:id>', views.deleteGrade),
 
+
+    path('api/get_all_person/', views.getAllPerson),
+    path('api/get_selected_person/<int:id>', views.getSelectedPerson),
+    path('api/add_person/', views.addPerson),
+    path('api/update_person/<int:id>', views.updatePerson),
+    path('api/delete_person/<int:id>', views.deletePerson),
+
 ]

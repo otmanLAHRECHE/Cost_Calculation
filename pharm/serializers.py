@@ -265,3 +265,11 @@ class GradeListSerialize(serializers.ModelSerializer):
 
 
 
+class PersonnelSerialize(serializers.ModelSerializer):
+    service = ServiceSerialize()
+    grade = GradeSerialize()
+
+    class Meta:
+        model = Grade
+        fields = ['id', 'full_name', 'service', 'grade']
+

@@ -1778,3 +1778,88 @@ def deleteGrade(request, id):
 
 
 
+
+
+
+
+@api_view(['GET'])
+def getAllPerson(request):
+    if request.method == 'GET' and request.user.is_authenticated:
+        queryset = Personnel.objects.all()
+
+        source_serial = PersonnelSerialize(queryset, many=True)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+   
+
+@api_view(['GET'])
+def getSelectedPerson(request, id):
+    if request.method == 'GET' and request.user.is_authenticated:
+
+        queryset = Personnel.objects.get(id=id)
+
+        source_serial = PersonnelSerialize(queryset)
+
+        return Response(status=status.HTTP_200_OK,data=source_serial.data)
+                
+    
+    else :
+        return Response(status=status.HTTP_401_UNAUTHORIZED)   
+
+@api_view(['POST'])
+def addPerson(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        full_name = request.data.pop("full_name")
+        service_id = request.data.pop("service_id")
+        grade_id = request.data.pop("grade_id")
+
+        service = Service.objects.get(id = service_id)
+        grade = Grade.objects.get(id = grade_id)
+
+
+        personel = Personnel.objects.create(full_name=full_name, grade = grade, service = service)
+
+        if personel.id is not None:
+            return Response(status=status.HTTP_201_CREATED, data={"status": "Personnel created sucsusfully"}) 
+        
+        else:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def updatePerson(request, id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        
+        full_name = request.data.pop("full_name")
+        service_id = request.data.pop("service_id")
+        grade_id = request.data.pop("grade_id")
+
+        service = Service.objects.get(id = service_id)
+        grade = Grade.objects.get(id = grade_id)
+
+        article_to_update = Personnel.objects.get(id=id)
+        if not article_to_update.full_name == full_name:
+            article_to_update.full_name = full_name
+        if not article_to_update.service == service:
+            article_to_update.service = service
+        if not article_to_update.grade == grade:
+            article_to_update.grade = grade
+        
+        article_to_update.save()
+        
+        return Response(status=status.HTTP_200_OK, data = {"status":"Person updated"})
+
+
+@api_view(['DELETE'])
+def deletePerson(request, id):
+    if request.method == 'DELETE' and request.user.is_authenticated:
+        Personnel.objects.filter(id=id).delete()
+        return Response(status=status.HTTP_200_OK, data = {"status":"Person deleted"})
+    
+
+
+
